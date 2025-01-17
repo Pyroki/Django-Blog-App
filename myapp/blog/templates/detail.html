@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row my-4">
+        <!-- Main Content Section -->
+        <div class="col-lg-8">
+            <h1 class="mb-3">{{ post.title }}</h1>
+            <p class="text-muted">Posted on January 1, 2024</p>
+            <img 
+                src="{{ post.img_url }}" 
+                class="img-fluid mb-4 rounded shadow-sm" 
+                alt="Blog Image" 
+                style="max-height: 500px; object-fit: cover; width: 100%;">
+            <p>{{ post.content }}</p>
+        </div>
+        
+        <!-- Sidebar Section -->
+        <div class="col-lg-4">
+            <div class="card mt-3">
+                <div class="card-body">
+
+                    <h5 class="card-title">Related Posts</h5>
+                    <ul class="list-unstyled">
+                        {%for related_post in related_posts%}
+                        <li><a href="{%url "blog:detail" slug=related_post.slug%}" class="text-decoration-none">{{related_post.title}}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

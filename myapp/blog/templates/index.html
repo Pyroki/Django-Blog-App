@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row my-2">
+        <div class="col">
+            <h2>{{ blog_title }}</h2>
+        </div>
+        <div class="col-3">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search..." aria-label="Search">
+                <button class="btn btn-outline-light btn-primary" type="button" id="button-search">
+                    <i class="bi bi-search"></i> <!-- Bootstrap Icons -->
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row m-3">
+        {% if page_obj %}
+        {% for post in page_obj %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <img 
+                    src="{{ post.img_url }}" 
+                    class="card-img-top img-fluid" 
+                    alt="Image" 
+                    style="height: 200px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ post.title }}</h5>
+                    <p class="card-text">{{ post.content|truncatewords:20 }}</p>
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'blog:detail' slug=post.slug %}">Read More</a>
+                        <a class="text-decoration-none text-dark fw-bold" href="#">{{post.category.name}}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <h2>No posts available</h2>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
