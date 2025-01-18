@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -15,6 +16,7 @@ class Post(models.Model):
     img_url = models.URLField(null=True)
     slug=models.SlugField(unique=False)
     category = models.ForeignKey(Category,on_delete=models.CASCADE)
+    user = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
 
     def save(self, *args, **kwargs):
     # Generate the slug from the title

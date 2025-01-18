@@ -4,8 +4,8 @@ from django.urls import reverse
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.core.paginator import Paginator
 from django.contrib.auth.models import User
-from blog.models import Post
-from .forms import RegisterForm, LoginForm,ForgotPasswordForm
+from blog.models import Post,Category
+from .forms import PostForm, RegisterForm, LoginForm,ForgotPasswordForm
 from django.contrib.auth import authenticate,logout as auth_logout
 from django.utils.http import urlsafe_base64_decode,urlsafe_base64_encode
 from django.utils.encoding import force_bytes
@@ -68,7 +68,13 @@ def login(request):
 
 def dashboard(request):
     b='My Posts'
-    return render(request,'dashboard.html',{'b':b})
+    all_posts = Post.objects.filter(user=request.user)
+
+    paginator = Paginator(all_posts, 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request,'dashboard.html',{'b':b,'page_obj':page_obj})
 
 def logout(request):
     auth_logout(request)
@@ -92,3 +98,21 @@ def forgot_password(request):
 
          
     return render(request,'forgot_password.html')
+
+
+def new_post(request):
+
+    form = PostForm()
+    categories = Category.objects.all()
+
+
+     
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post=form.save(commit=False)
+            post.user = request.user
+            post.save()
+            return redirect("blog:dashboard")
+
+    return render (request,'new_post.html',{'categories':categories,"form":form} )

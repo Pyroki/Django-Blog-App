@@ -11,6 +11,7 @@ urlpatterns = [
     path('login',views.login,name='login'),
     path('dashboard',views.dashboard,name='dashboard'),
     path('logout',views.logout,name='logout'),
-    path('forgot_password',views.forgot_password,name='forgot_password')
+    path('forgot_password',views.forgot_password,name='forgot_password'),
+    path('new_post',views.new_post,name="new_post")
 
 ]
