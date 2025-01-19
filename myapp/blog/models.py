@@ -13,7 +13,7 @@ class Category(models.Model):
 class Post(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField()
-    img_url = models.URLField(null=True)
+    img_url = models.ImageField(upload_to='post/images', height_field=None, width_field=None, max_length=None)
     slug=models.SlugField(unique=False)
     category = models.ForeignKey(Category,on_delete=models.CASCADE)
     user = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
@@ -22,6 +22,12 @@ class Post(models.Model):
     # Generate the slug from the title
         self.slug = slugify(self.title)
         super().save(*args, **kwargs)
+    
+    @property
+    def formatted_img_url(self):
+        url = self.img_url if self.img_url.__str__().startswith(('http','https')) else self.img_url.url
+        return url
+
 
 
 

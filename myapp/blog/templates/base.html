@@ -17,7 +17,7 @@
             </div>
             <div class="col">
                 <div class="d-flex justify-content-center gap-3">
-                    <a class="text-light text-decoration-none" href="">Home</a>
+                    <a class="text-light text-decoration-none" href="{% url "blog:index"%}">Home</a>
                     <a class="text-light text-decoration-none" href="">About</a>
                     <a class="text-light text-decoration-none" href="http://127.0.0.1:8000/blog/contact">Contact</a>
                     {% if user.is_authenticated %}

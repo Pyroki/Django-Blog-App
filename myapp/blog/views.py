@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse
 from django.urls import reverse
 from django.contrib.auth import login as auth_login, logout as auth_logout
@@ -108,7 +108,7 @@ def new_post(request):
 
      
     if request.method == 'POST':
-        form = PostForm(request.POST)
+        form = PostForm(request.POST,request.FILES)
         if form.is_valid():
             post=form.save(commit=False)
             post.user = request.user
@@ -116,3 +116,21 @@ def new_post(request):
             return redirect("blog:dashboard")
 
     return render (request,'new_post.html',{'categories':categories,"form":form} )
+
+def edit_post(request,post_id):
+    form=PostForm()
+    categories = Category.objects.all()
+    post = get_object_or_404(Post,slug=post_id)
+
+    if request.method =='POST':
+        form = PostForm(request.POST,request.FILES,instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect('blog:dashboard')
+
+    return render(request,'edit_post.html',{'categories':categories,'post':post,'form':form})
+
+def delete_post(request,post_id):
+    post = get_object_or_404(Post,slug=post_id)
+    post.delete()
+    return redirect('blog:dashboard')
